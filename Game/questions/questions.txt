@@ -1,0 +1,238 @@
+A local variable?
+a) Can be used anywhere in the program
+b) Is declared within a method
+c) Must accept a class
+d) Represent a class object
+b
+An instance variable
+a) is an object of a class
+b) represents an attribute of an object
+c) is a method of a class
+d) a and c
+b
+Private Button print = new button();
+a) creates a button control
+b) initializes a button control
+c) instantiates button control
+d) a and c
+d
+An instance method
+a) Represents the behavior of an object
+b) Represents the attribute of an object
+c) Represents another class
+d) a and b
+a
+A Constructor
+a) is used to create objects
+b) must have the same name as the class it is declared within
+c) maybe overloaded
+d) all of the above
+d
+class Test: Form { }
+a) Creates the class Test : Form
+b) Creates the class Test that inherits the class Form
+c) Creates the class form that inherits the class Test
+d) a and b
+b
+A variable declared inside a method is called a________variable
+a) Static
+b) Private
+c) Local
+d) Serial
+c
+Defining two methods with the same name but with different parameters is called.
+a) Loading
+b) Overloading
+c) Multiplexing
+d) Duplexing
+b
+String mystring; Creates a(n)
+a) Class
+b) Constructor
+c) Object
+d) a and b
+c
+A delegate defines
+a) a Washington representative
+b) a class that encapsulates methods
+c) a means of passing arrays into methods
+d) a substitute for an inherited method
+b
+What is the proper header for a class that intends to use an interface.
+a) class MyClass IFace
+b) class MyClass ; IFace
+c) class MyClass : IFace
+d) class MyCalss {IFace}
+c
+In order for a class to use an interface, it must
+a) inherit the properties of the interface
+b) contain the same methods as the interface
+c) create an interface objects
+d) all of the above
+d 
+
+18) Every class directly or indirectly extends the______class.
+       a) System
+       b) Object - correct answer
+       c) Drawing
+       d) Console
+
+19) The concept of composition specifies that you can.
+       a) Compose good code with C#
+       b) Compose C# projects with different objects - correct answer
+       d) Reduce errors by remaining composed during programming
+       e) all of the above
+
+20) Polymorphism occurs when the methods of the child class.
+       a) Override the parent class methods but maintain the implementation
+       b) Maintain the same return type and arguments as the parent class, but implement it differently - correct answer
+       c) Have different return types and arguments than the parent class
+       d) Are Virtual
+
+21) To output the value of multidimensional array, Console.WriteLines(___)
+       a) myArray[1][3];
+       b) myArray[1,3]; - correct answer
+       c) myArray{1}{3};
+       d) myArray(1),(3);
+
+22) All methods in an abstract base class must be declared abstract.
+       a) True
+       b) False - correct answer
+
+23) Methods that are declared abstract in the base class must show implementation at the time of declaration.
+       a) True
+       b) False - correct answer
+
+24) The code public class B : A { }
+       a) Defines a class that inherits all the methods of A
+       b) Defines a class that inherits the public and protected methods of A only - correct answer
+       c) Errors
+       d) a and b
+
+25) Assuming that public class B : A { public B(int i) :base(i) { } } compiles and runs correctly, what can we conclude about the constructors in the class A?
+       a) One constructor takes an argument of type i
+       b) There is only a default constructor
+       c) One constructor takes an arguments of the type int - correct answer
+       d) a and b
+
+26) Classes declared with the sealed keyword cannot be base class.
+       a) True - correct answer
+       b) False
+
+27) A method_____an exception when that method detects that a problem has occured.
+       a) Trys
+       b) Catches
+       c) Throws - correct answer
+       d) a and b
+
+28) Exception objects are derived from the class.
+       a) Try
+       b) Catch
+       c) Exception - correct answer
+       d) Event
+       e) System
+
+29) An abstract class
+       a) may contain instance variables
+       b) may contain constructors
+       c) may extend another class
+       d) a and b
+       e) all of the above - correct answer
+
+30) A____block enclose the code that could throw an exception.
+       a) Try - correct answer
+       b) Catch
+       c) Exception
+       d) Error
+       e) a and b
+
+31) A Thread is:
+       a) an object that allows computer multitasking - correct answer
+       b) an object that wraps itself with other threads
+       c) a deprecated object that is no longer used
+
+32) Synchronization is:
+       a) the delaying of a thread until there is sufficient memory and work to keep it up
+       b) making every thread start and end at the same time
+       c) make each thread do the same thing
+       d) have each thread start at the same time but not necessarily finish together
+       e) wait until the required resources, that are used by other threads become available - correct answer
+
+33) In C# Thread.Sleep(time) measures time in:
+       a) seconds
+       b) milliseconds - correct answer
+       c) nanoseconds
+       d) all of the above
+
+34) When a thread returns from a WaitSleepJoin or Suspended state it returns to the:
+       a) Unstarted state
+       b) Stopped state
+       c) Started state (now considering a part of the running state) - correct answer
+       d) Resume state
+
+35) The ThreadPriority enumeration does not contain:
+       a) Lowest
+       b) Highest
+       c) BelowNormal
+       d) None of the above - correct answer
+
+36) The way of returning a thread from s suspended state is:
+       a) Pulse
+       b) PulseAll
+       c) Interrupt
+       d) Resume - correct answer
+       e) ReStart
+
+37) In order to lock/unlock an object use the.
+       a) Lock and Unlock methods
+       b) Enter and Exit methods - correct answer
+       c) Close and Open methods
+       d) Close and Allow methods
+
+38) Class String and the Char structure found in the:
+       a) System.Strings namespace
+       b) System.Text namespace
+       c) System.Chars namespace
+       d) System namespace - correct answer
+
+39) A String literal is a:
+       a) only contains one character
+       b) contains numbers rather than letters
+       c) sequence of characters in double quotation marks - correct answer
+       d) contains exactly its variable name and nothing else
+
+40) To create a string literal exclude escape sequence, use:
+       a) !string
+       b) @string - correct answer
+       c) #string
+       d) $string
+
+41) String indexers treat strings as:
+       a) binary code
+       b) 1 to string Length
+       c) arrays of characters - correct answer
+       d) a character
+
+42) If an IndexofAny method is passed an array of characters it:
+       a) finds the first occurrence of each letter in the string
+       b) searches for the first occurrence of any of the characters in the string - correct answer
+       c) will search for the first occurrence of the sequence of characters
+       d) generates an error
+
+43) Concatenating with strings are done with:
+       a) reserved words
+       b) method calls
+       c) operator overloading
+       d) operator overloading and method calls - correct answer
+
+44) If two StringBuilder objects contain the same string then
+       a) they represent the same meory location
+       b) the are two different objects - correct answer
+       c) if one changes, so will the other
+       d) None of the above
+
+45) The proper way to convert a string to all lowercase is:
+       a) String = string.ToLower(string);
+       b) ToLower(string);
+       c) string.ToLower(); - correct answer
+       d) string.ToLower(string);
