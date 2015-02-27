@@ -12,12 +12,12 @@
 
         struct Question
         {
-           public string text;
-           public string a;
-           public string b;
-           public string c;
-           public string d;
-           public char correctAnswer;
+            public string text;
+            public string a;
+            public string b;
+            public string c;
+            public string d;
+            public char correctAnswer;
         }
 
         const int GameWidth = FieldWidth + InfoPanelWidth + 3;
@@ -43,29 +43,29 @@
             Console.BufferWidth = GameWidth;
             Console.WindowHeight = GameHeight + 2;
             Console.BufferHeight = GameHeight + 2;
-            
+
             // Draw menu
             DrawMenuScreen();
 
             Console.Clear();
-            
+
             // Draw game field
             DrawBorders();
 
-            GenerateQuestion();    
-                     
-            
-            
+            GenerateQuestion();
+
+
+
         }
 
         // Check if player answered correct
         static bool IsAnsweredCorrect(char key)
-        {  
+        {
             ConsoleKeyInfo pressedKey = Console.ReadKey();
 
             if (pressedKey.KeyChar == key)
             {
-                return true;               
+                return true;
             }
 
 
@@ -74,17 +74,40 @@
 
         static void GenerateQuestion()
         {
+            //creates a list with starting points for all of the questions
+            List<int> questionStartPositions = new List<int>();
+            for (int i = 0; i < 198; i += 6)
+            {
+                questionStartPositions.Add(i);
+            }
+            //creates a new Question
             Question question1 = new Question();
 
-            using (StreamReader questions = new StreamReader(@"..\..\questions\questions.txt"))
-            {                
-                question1.text = questions.ReadLine();
-                question1.a = questions.ReadLine();
-                question1.b = questions.ReadLine();
-                question1.c = questions.ReadLine();
-                question1.d = questions.ReadLine();
-                question1.correctAnswer = (char)questions.Read();
+            //randomizes starting positions
+            Random randomGenerator = new Random();
+            int rnd = randomGenerator.Next(questionStartPositions.Count);
+            int position = questionStartPositions[rnd];
+
+            //reads from the text file
+            using (StreamReader nextquestion = new StreamReader(@"..\..\questions\questions.txt"))
+            {
+                //creates a list with all of the questions
+                List<string> text = new List<string>();
+                for (int i = 0; i < 198; i++)
+                {
+                    text.Add(nextquestion.ReadLine());
+                }
+
+                //assigns question properties using randomness
+                question1.text = text[position];
+                question1.a = text[position + 1];
+                question1.b = text[position + 2];
+                question1.c = text[position + 3];
+                question1.d = text[position + 4];
+                string correct = text[position + 5];
+                question1.correctAnswer = correct[0];
             }
+
 
             Print(8, 5, question1.text);
             Print(10, 9, question1.a);
@@ -119,14 +142,14 @@
             for (int row = 0; row < GameHeight; row++)
             {
                 Print(row, 0, BorderCharacter); // Left border
-                
+
                 Print(row, FieldWidth + 1 + InfoPanelWidth + 1, BorderCharacter);  // Right border
             }
 
             string menuTitle = "MENU";
             string player1Name = "PLAYER 1: ENTER NAME";
             string player2Name = "PLAYER 2: ENTER NAME";
-            
+
             //string p2Input = Console.ReadLine();
             int startposition = GameWidth / 2 - (menuTitle.Length - 1) / 2;
             //startposition = startposition + FieldWidth + 2;
@@ -136,21 +159,21 @@
             Print(8, startposition, menuTitle);
 
             Print(10, startposition1, player1Name);
-            Print(11, startposition1 -1 , ' ');
-            
+            Print(11, startposition1 - 1, ' ');
+
             p1Input = Console.ReadLine();
 
             Print(13, startposition1, player2Name);
             Print(14, startposition1 - 1, ' ');
-            p2Input = Console.ReadLine();                     
-           
+            p2Input = Console.ReadLine();
+
         }
 
-        
 
-       
 
-        
+
+
+
 
         static void DrawBorders()
         {
