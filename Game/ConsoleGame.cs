@@ -17,7 +17,7 @@
            public string b;
            public string c;
            public string d;
-           public string correctAnswer;
+           public char correctAnswer;
         }
 
         const int GameWidth = FieldWidth + InfoPanelWidth + 3;
@@ -59,12 +59,11 @@
         }
 
         // Check if player answered correct
-        static bool IsAnsweredCorrect(string key)
+        static bool IsAnsweredCorrect(char key)
         {  
             ConsoleKeyInfo pressedKey = Console.ReadKey();
-            key = key.Trim();
 
-            if (pressedKey.Key.ToString() == key)
+            if (pressedKey.KeyChar == key)
             {
                 return true;               
             }
@@ -77,14 +76,14 @@
         {
             Question question1 = new Question();
 
-            using (StreamReader questions = new StreamReader(@"E:\Telerik Academy\Courses\02-C-Sharp-Part-II\TeamWork\Game\Game\questions\questions.txt"))
+            using (StreamReader questions = new StreamReader(@"..\..\questions\questions.txt"))
             {                
                 question1.text = questions.ReadLine();
                 question1.a = questions.ReadLine();
                 question1.b = questions.ReadLine();
                 question1.c = questions.ReadLine();
                 question1.d = questions.ReadLine();
-                question1.correctAnswer = questions.ReadLine();
+                question1.correctAnswer = (char)questions.Read();
             }
 
             Print(8, 5, question1.text);
