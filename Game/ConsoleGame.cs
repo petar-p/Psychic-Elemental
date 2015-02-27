@@ -9,7 +9,6 @@
 
     class ConsoleGame
     {
-
         struct Question
         {
             public string text;
@@ -33,6 +32,9 @@
 
         static void Main()
         {
+            // Setting Game Title
+            Console.Title = "C# Scramble";
+
             // Set Encoding
             Console.OutputEncoding = Encoding.GetEncoding(1252);
 
@@ -52,10 +54,40 @@
             // Draw game field
             DrawBorders();
 
+            // Draw Labyrinth
+            DrawLabyrinth();
+
             GenerateQuestion();
+        }
 
+        static void DrawLabyrinth()
+        {
+            string[,] map = new string[36, 1];
+            int rowCounter = 3; // used for setting an initial cursor position for printing the labyrinth
 
+            // Reading the map from external txt file
+            using (StreamReader labyrinth = new StreamReader(@"..\..\labyrinth\map.txt"))
+            {
+                // Filling the 2D string array
+                for (int row = 0; row < map.GetLength(0); row++)
+                {
+                    for (int col = 0; col < map.GetLength(1); col++)
+                    {
+                        map[row, col] = labyrinth.ReadLine();
+                    }
+                }
+            }
 
+            // Print the map
+            for (int row = 0; row < map.GetLength(0); row++)
+            {
+                for (int col = 0; col < map.GetLength(1); col++)
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Print(rowCounter, FieldWidth + 17, map[row, col]);
+                }
+                rowCounter++;
+            }
         }
 
         // Check if player answered correct
@@ -67,7 +99,6 @@
             {
                 return true;
             }
-
 
             return false;
         }
@@ -125,7 +156,6 @@
             {
                 Print(17, 5, "Incorrect!");
             }
-
         }
 
         static void DrawMenuScreen()
@@ -168,12 +198,6 @@
             p2Input = Console.ReadLine();
 
         }
-
-
-
-
-
-
 
         static void DrawBorders()
         {
