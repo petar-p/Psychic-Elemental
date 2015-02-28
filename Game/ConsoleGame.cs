@@ -29,20 +29,67 @@
         const char BorderCharacterVertical = '\u2588';     // vertical border character
         const char BorderCharacterHorizontal = '\u2588';   // horizontal border character
 
+        static char player1Character = '\u25A0';    //u263A
+        static char player2Character = '\u25A0';    //u263B
+
         static string p1Input;
         static string p2Input;
 
+        static bool p1Answer = false;
+        static bool p2Answer = false;
+        static bool isThereAWinner = false;
+        static bool winnerP1 = false;
+        static bool winnerP2 = false;
+
         static int questionCounter = 0; // question counter
+        static int p1Move = 0;
+        static int p2Move = 0;
+
+        // Coordinates of Player 1 moving positions on the map
+        static int[,] p1MovementCoords = new int[,] 
+        {
+            {38, 90},
+            {33, 90},
+            {33, 78},
+            {29, 78},
+            {29, 70},
+            {24, 70},
+            {24, 74},
+            {17, 74},
+            {17, 70},
+            {12, 70},
+            {12, 78},
+            { 8, 78},
+            { 8, 90},
+            { 3, 90}
+        };
+
+        // Coordinates of Player 2 moving positions on the map
+        static int[,] p2MovementCoords = new int[,] 
+        {
+            {38, 94},
+            {33, 94},
+            {33, 106},
+            {29, 106},
+            {29, 114},
+            {24, 114},
+            {24, 110},
+            {17, 110},
+            {17, 114},
+            {12, 114},
+            {12, 106},
+            { 8, 106},
+            { 8, 94},
+            { 3, 94}
+        };        
 
         static void Main()
         {
             // Setting Game Title
-            Console.Title = "C# Scramble";
+            Console.Title = "C# Scramble";            
 
             // Set Encoding
-            Console.OutputEncoding = Encoding.UTF8;
-
-            //Console.CursorVisible = false;
+            Console.OutputEncoding = Encoding.UTF8;            
 
             // Removing unusable space
             Console.WindowWidth = GameWidth;
@@ -52,36 +99,203 @@
 
             // Draw menu
             DrawMenuScreen();
+            PrintMenu();
 
             Console.Clear();
 
-            // Draw game field
-            DrawBorders();
+            Console.ForegroundColor = ConsoleColor.White;
+            Print(38, 90, player1Character);
+            Console.ForegroundColor = ConsoleColor.Red;
+            Print(38, 94, player2Character);
 
-            // Draw Labyrinth
-            DrawLabyrinth();
-            PrintPlayerInfo();
+            while (true)
+            {
+                Console.CursorVisible = false;               
 
-            GenerateQuestion();
+                // Draw game field
+                DrawBorders();
+                PrintPlayerInfo();
 
-            //Added Timer
-            TimerCallback callback = new TimerCallback(Tick);
-            Timer stateTimer = new Timer(callback, null, 0, 1000);
-            //waiting for the user to press any button
-            Console.ReadLine();
+                // Draw Labyrinth
+                DrawLabyrinth();
+                PrintPlayersNextPosition();
+
+                // Check for winner
+                if (p1Move == 13 || p2Move == 13)
+                {
+                    if (CheckForWinner())
+                    {
+                        break;  // GAME OVER ! There's a winner
+                    }
+                    else
+                    {
+                        // Both players are at the end of the labyrinth, that means equal score
+
+                        // TODO: Decide how to name the winner... penalties or something else
+                        continue;
+                    }
+                }
+
+                GenerateQuestion();
+
+                Player1Movement();                
+                Player2Movement();              
+
+                Console.Clear();            
+            }
+            
+            GameOver();
+
+            ////Added Timer
+            //TimerCallback callback = new TimerCallback(Tick);
+            //Timer stateTimer = new Timer(callback, null, 0, 1000);
+            ////waiting for the user to press any button
+            //Console.ReadLine();
         }
 
+        static void PrintMenu()
+        {
+            string menuTitle = "MENU";
+            string player1Name = "PLAYER 1: ENTER NAME";
+            string player2Name = "PLAYER 2: ENTER NAME";
+
+            int startposition = GameWidth / 2 - (menuTitle.Length - 1) / 2;
+
+            int startposition1 = GameWidth / 2 - 11;
+
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Print(8, startposition, menuTitle);
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Print(10, startposition1, player1Name);
+            Print(11, startposition1 - 1, ' ');
+
+            Console.ForegroundColor = ConsoleColor.White;
+            p1Input = Console.ReadLine();
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Print(13, startposition1, player2Name);
+            Print(14, startposition1 - 1, ' ');
+
+            Console.ForegroundColor = ConsoleColor.Red;
+            p2Input = Console.ReadLine();
+        }
+
+        // Anouncing the winner and GAME OVER!
+        static void GameOver()
+        {     
+            //DrawMenuScreen();
+
+            string announceWinner = "THE WINNER IS:";
+            string gameOver = "GAME OVER !";
+            int startposition = GameWidth / 2 - ((announceWinner.Length - 1) / 2) +  InfoPanelWidth/2 + 1;
+            int startposition1 = GameWidth / 2 - (p1Input.Length - 1) / 2 + InfoPanelWidth / 2 + 1;
+            int startposition2 = GameWidth / 2 - (p2Input.Length - 1) / 2 + InfoPanelWidth / 2 + 1;
+            int startposition3 = GameWidth / 2 - (gameOver.Length - 1) / 2 + InfoPanelWidth / 2 + 1;
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Print(10, startposition, announceWinner);
+
+            // Announce player 1 as winner 
+            if (winnerP1)
+            {               
+                Console.ForegroundColor = ConsoleColor.White;
+                Print(12, startposition1, p1Input);
+            }// Announce player 2 is winner
+            else if(winnerP2)
+	        {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Print(12, startposition2, p2Input);
+	        }
+
+            // Print GAME OVER!
+            Console.ForegroundColor = ConsoleColor.Green;
+            Print(14, startposition3, gameOver);            
+        }
+
+        // Check for winner
+        static bool CheckForWinner()
+        {
+            if (p1Move == 13 && p2Move != 13)
+            {
+                // GAME OVER! The winner in Player 1
+                winnerP1 = true;    // flag that Player 1 is winner
+                isThereAWinner = true;                
+            }
+            else if (p2Move == 13 && p1Move != 13)
+            {
+                // GAME OVER! The winner in Player 2
+                winnerP2 = true;    // flag that Player 2 is winner
+                isThereAWinner = true;
+            }
+            else if (p1Move == 13 && p2Move == 13)
+            {
+                // Both players are at the end of the labyrinth, that means equal score
+
+                // TODO: Decide how to name the winner... penalties or something else
+                isThereAWinner = false;
+            }
+
+            return isThereAWinner;
+        }        
+
+        // Print players next positions
+        static void PrintPlayersNextPosition()
+        {
+            Console.ForegroundColor = ConsoleColor.White;
+            Print(p1MovementCoords[p1Move, 0], p1MovementCoords[p1Move, 1], player1Character);
+            
+            Console.ForegroundColor = ConsoleColor.Red;
+            Print(p2MovementCoords[p2Move, 0], p2MovementCoords[p2Move, 1], player2Character);
+        }
+
+        static void Player1Movement()
+        {
+            if (p1Answer)
+            {
+                p1Move++;
+            }
+            else
+            {
+                p1Move--;
+                if (p1Move < 0)
+                {
+                    p1Move = 0;
+                }
+            }
+        }
+
+        static void Player2Movement()
+        {
+            if (p2Answer)
+            {
+                p2Move++;
+            }
+            else
+            {
+                p2Move--;
+                if (p2Move < 0)
+                {
+                    p2Move = 0;
+                }
+            }
+        }
+
+        // Print players info
         static void PrintPlayerInfo()
         {
-            string infoFormatter1 = "{0,-22}VS{1,22}";
+            
             string player1Label = "PLAYER 1:";
             string player2Label = "PLAYER 2:";
 
             Console.ForegroundColor = ConsoleColor.Green;
-            Print(3, 8, String.Format(infoFormatter1, player1Label, player2Label));
+            Print(3, 8, player1Label);            
+            Print(3, 45, player2Label);
 
             Console.ForegroundColor = ConsoleColor.White;
             Print(4, 8, p1Input);
+
+            Console.ForegroundColor = ConsoleColor.Red;
             Print(4, 45, p2Input);
         }
 
@@ -168,7 +382,7 @@
                 question1.correctAnswer = correct[0];
             }
 
-            Console.ForegroundColor = ConsoleColor.Red;
+            Console.ForegroundColor = ConsoleColor.Gray;
 
             Print(7, 5, "Question: " + questionCounter);
 
@@ -181,20 +395,44 @@
             Print(13, 9, question1.c);
             Print(14, 9, question1.d);
 
-            Console.ForegroundColor = ConsoleColor.Yellow;
+            // 
 
-            Print(16, 5, "Choose an answer .. ");
+            Print(15, 5, question1.correctAnswer);
+
+            Console.ForegroundColor = ConsoleColor.White;
+            Print(16, 5, "Player 1, choose an answer .. ");            
 
             if (IsAnsweredCorrect(question1.correctAnswer))
             {
-                Console.ForegroundColor = ConsoleColor.Green;
-                Print(17, 5, "Correct!");
+                p1Answer = true;
             }
             else
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Print(17, 5, "Incorrect!");
+
+                p1Answer = false;
             }
+
+            Console.ForegroundColor = ConsoleColor.Red;
+            Print(18, 5, "Player 2, choose an answer .. ");
+
+            if (IsAnsweredCorrect(question1.correctAnswer))
+            {
+                p2Answer = true;
+            }
+            else
+            {
+
+                p2Answer = false;
+            }
+
+            string correctAns = "The correct answer is: {0}";
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Print(20, 5, String.Format(correctAns, question1.correctAnswer));
+
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Print(22, 5, "Next question ..");
+            Console.ReadLine();
         }
 
         // Draw screen menu
@@ -216,33 +454,7 @@
                 Print(row, 0, BorderCharacterVertical); // Left border
 
                 Print(row, FieldWidth + 1 + InfoPanelWidth + 1, BorderCharacterVertical);  // Right border
-            }
-
-            string menuTitle = "MENU";
-            string player1Name = "PLAYER 1: ENTER NAME";
-            string player2Name = "PLAYER 2: ENTER NAME";
-
-            int startposition = GameWidth / 2 - (menuTitle.Length - 1) / 2;
-
-            int startposition1 = GameWidth / 2 - 11;
-
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Print(8, startposition, menuTitle);
-
-            Console.ForegroundColor = ConsoleColor.Green;
-            Print(10, startposition1, player1Name);
-            Print(11, startposition1 - 1, ' ');
-
-            Console.ForegroundColor = ConsoleColor.White;
-            p1Input = Console.ReadLine();
-
-            Console.ForegroundColor = ConsoleColor.Green;
-            Print(13, startposition1, player2Name);
-            Print(14, startposition1 - 1, ' ');
-
-            Console.ForegroundColor = ConsoleColor.White;
-            p2Input = Console.ReadLine();
-
+            } 
         }
 
         // Draw borders

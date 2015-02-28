@@ -110,8 +110,8 @@ An abstract class
 a) may contain instance variables
 b) may contain constructors
 c) may extend another class
-e) all of the above
-e
+d) all of the above
+d
 A____block enclose the code that could throw an exception.
 a) Try
 b) Catch
