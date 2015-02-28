@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
+    using System.Threading;
     using System.Threading.Tasks;
     using System.IO;
 
@@ -49,7 +50,7 @@
             // Draw menu
             DrawMenuScreen();
 
-            Console.Clear();
+            Console.Clear();          
 
             // Draw game field
             DrawBorders();
@@ -57,7 +58,14 @@
             // Draw Labyrinth
             DrawLabyrinth();
 
-            GenerateQuestion();
+            GenerateQuestion();            
+
+            //Added Timer
+            TimerCallback callback = new TimerCallback(Tick);
+            Timer stateTimer = new Timer(callback, null, 0, 1000);
+            //waiting for the user to press any button
+            Console.ReadLine();
+
         }
 
         static void DrawLabyrinth()
@@ -145,16 +153,18 @@
             Print(11, 9, question1.b);
             Print(12, 9, question1.c);
             Print(13, 9, question1.d);
-
-            Print(15, 5, "Choose an answer .. ");
+            
+            Print(15, 5, "Choose an answer...");
 
             if (IsAnsweredCorrect(question1.correctAnswer))
             {
                 Print(17, 5, "Correct!");
+                Console.WriteLine();
             }
             else
             {
                 Print(17, 5, "Incorrect!");
+                Console.WriteLine();
             }
         }
 
@@ -224,6 +234,11 @@
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.SetCursorPosition(col, row);
             Console.Write(data);
+        }
+
+        static void Tick(Object stateInfo)
+        {
+            Console.Write("\rTick Tack: {0}", DateTime.Now.ToString("h:mm:ss"));            
         }
     }
 }
