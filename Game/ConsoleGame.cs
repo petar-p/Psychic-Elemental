@@ -97,6 +97,10 @@
             Console.WindowHeight = GameHeight + 2;
             Console.BufferHeight = GameHeight + 2;
 
+            DrawMenuScreen();
+            DrawLogo();
+            Console.Clear();
+
             // Draw menu
             DrawMenuScreen();
             PrintMenu();
@@ -149,9 +153,103 @@
             }
 
             GameOver();
+            Console.ReadLine();
+            Console.Clear();
+            PrintCredits();
+            Console.ReadLine();
 
         }
 
+        // Print Credits
+        static void PrintCredits()
+        {
+            DrawMenuScreen();
+
+            Console.ForegroundColor = ConsoleColor.Green;
+
+            string credits = "CREDITS:";
+            string telerikAcademy = "TELERIK ACADEMY";
+            string finalLine = String.Empty;
+
+            int startposition = GameWidth / 2 - (credits.Length - 1) / 2;
+            int startposition1 = GameWidth / 2 - (telerikAcademy.Length - 1) / 2;
+
+            Print(5, startposition, credits);
+            Print(7, startposition1, telerikAcademy);
+            Print(9, startposition1 - 5, "TEAM: PSYCHIC ELEMENTAL");
+            Print(11, startposition1 - 5, "TEAM MEMBERS:");
+
+            Print(13, startposition1 - 5, "ABELINA GEORGIEVA");
+            Print(13, startposition1 + 25, "(abelina)");
+
+            Print(14, startposition1 - 5, "BOZHKO BOZHKOV");
+            Print(14, startposition1 + 25, "(bbojkov)");
+
+            Print(15, startposition1 - 5, "DIANA IVANOVA");
+            Print(15, startposition1 + 25, "(diana.ivanova)");
+
+            Print(16, startposition1 - 5, "KONSTANTIN ISKROV");
+            Print(16, startposition1 + 25, "(iskroff)");
+
+            Print(17, startposition1 - 5, "PETAR ALEXANDROV");
+            Print(17, startposition1 + 25, "(P.Alexandrov)");
+
+            Print(18, startposition1 - 5, "PETAR PETROV");
+            Print(18, startposition1 + 25, "(eudaimonia)");
+
+            Print(19, startposition1 - 5, "SVETOSLAV IVANOV");
+            Print(19, startposition1 + 25, "(Inxslackware)");
+
+            Print(20, startposition1 - 5, "VYARA HRISTOVA");
+            Print(20, startposition1 + 25, "(vyarah)");
+
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Print(Console.WindowHeight - 2, 3, finalLine);
+
+        }
+
+        // Draw intro Logo
+        static void DrawLogo()
+        {
+            string[,] logo = new string[34, 1];
+            int rowCounter = 4; // used for setting an initial cursor position for printing the labyrinth
+
+            // Reading the map from external txt file
+            using (StreamReader logoFile = new StreamReader(@"..\..\logo\logo.txt"))
+            {
+                // Filling the 2D string array
+                for (int row = 0; row < logo.GetLength(0); row++)
+                {
+                    for (int col = 0; col < logo.GetLength(1); col++)
+                    {
+                        logo[row, col] = logoFile.ReadLine();
+                    }
+                }
+            }
+
+            // Print the logo
+            for (int row = 0; row < logo.GetLength(0); row++)
+            {
+                for (int col = 0; col < logo.GetLength(1); col++)
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Print(rowCounter, 12, logo[row, col]);
+                }
+                rowCounter++;
+            }
+
+            string developedBy = "DEVELOPED BY: TEAM PSYCHIC ELEMENTAL";
+            string telerikAcademy = "TELERIK ACADEMY";
+
+            int startposition = GameWidth / 2 - (developedBy.Length - 1) / 2;
+            int startposition1 = GameWidth / 2 - (telerikAcademy.Length - 1) / 2;
+
+            Print(Console.WindowHeight - 2, startposition, developedBy);
+            Print(Console.WindowHeight - 1, startposition1, telerikAcademy);
+            Console.ReadLine();
+        }
+
+        // Print game menu
         static void PrintMenu()
         {
             string menuTitle = "MENU";
