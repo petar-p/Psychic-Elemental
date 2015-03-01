@@ -387,20 +387,20 @@
             Print(7, 5, "Question: " + questionCounter);
 
             Console.ForegroundColor = ConsoleColor.Green;
-            Print(9, 5, question1.text);
+            PrintQuestion(9, 5, question1.text, FieldWidth - 5);
 
             Console.ForegroundColor = ConsoleColor.Cyan;
-            Print(11, 9, question1.a);
-            Print(12, 9, question1.b);
-            Print(13, 9, question1.c);
-            Print(14, 9, question1.d);
+            PrintQuestion(11, 9, question1.a, FieldWidth - 10);
+            PrintQuestion(13, 9, question1.b, FieldWidth - 10);
+            PrintQuestion(15, 9, question1.c, FieldWidth - 10);
+            PrintQuestion(17, 9, question1.d, FieldWidth - 10);
 
             // 
 
-            Print(15, 5, question1.correctAnswer);
+            Print(19, 9, question1.correctAnswer);
 
             Console.ForegroundColor = ConsoleColor.White;
-            Print(16, 5, "Player 1, choose an answer .. ");            
+            Print(22, 5, "Player 1, choose an answer .. ");            
 
             if (IsAnsweredCorrect(question1.correctAnswer))
             {
@@ -413,7 +413,7 @@
             }
 
             Console.ForegroundColor = ConsoleColor.Red;
-            Print(18, 5, "Player 2, choose an answer .. ");
+            Print(24, 5, "Player 2, choose an answer .. ");
 
             if (IsAnsweredCorrect(question1.correctAnswer))
             {
@@ -428,10 +428,10 @@
             string correctAns = "The correct answer is: {0}";
 
             Console.ForegroundColor = ConsoleColor.Green;
-            Print(20, 5, String.Format(correctAns, question1.correctAnswer));
+            Print(26, 5, String.Format(correctAns, question1.correctAnswer));
 
             Console.ForegroundColor = ConsoleColor.Gray;
-            Print(22, 5, "Next question ..");
+            Print(28, 5, "Next question ..");
             Console.ReadLine();
         }
 
@@ -487,9 +487,40 @@
             Console.Write(data);
         }
 
+        //printing questions
+        static void PrintQuestion(int row, int col, string text, int maxTextWidth)
+        {
+            if (text.Length > maxTextWidth - 1)
+            {
+
+                //string[] splittedtext = text.Split(new char[] {' '}, StringSplitOptions.RemoveEmptyEntries);
+                int count = 1;
+                while (text[maxTextWidth - count] != ' ')
+                {
+                    count++;
+                }
+
+                int middle = maxTextWidth - count;
+                string firstHalf = text.Substring(0, middle);
+                string secondHalf = text.Substring(middle);
+                Console.SetCursorPosition(col, row);
+                Console.Write(firstHalf);
+                Console.SetCursorPosition(col, row + 1);
+                Console.Write(secondHalf);
+            }
+
+            else
+            {
+                Console.SetCursorPosition(col, row);
+                Console.Write(text);
+            }
+        }
+
         static void Tick(Object stateInfo)
         {
             Console.Write("\rTick Tack: {0}", DateTime.Now.ToString("h:mm:ss"));
         }
+
+
     }
 }
