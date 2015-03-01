@@ -120,6 +120,8 @@
                 DrawLabyrinth();
                 PrintPlayersNextPosition();
 
+                PrintAnswersToWin();
+
                 // Check for winner
                 if (p1Move == 13 || p2Move == 13)
                 {
@@ -143,7 +145,7 @@
 
                 Console.Clear();            
             }
-            
+
             GameOver();
 
             ////Added Timer
@@ -297,6 +299,17 @@
 
             Console.ForegroundColor = ConsoleColor.Red;
             Print(4, 45, p2Input);
+        }
+
+        static void PrintAnswersToWin()
+        {
+            //change if both players ar at the final
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            int playerOneAnswersLeft = p1MovementCoords.GetLength(0) - p1Move;
+            int playerTwoAnswersLeft = p1MovementCoords.GetLength(0) - p2Move;
+            Print(Console.WindowHeight - 2, 3, string.Format("Player 1 - {0} correct answers to win", playerOneAnswersLeft));
+            Print(Console.WindowHeight - 1, 3, string.Format("Player 2 - {0} correct answers to win", playerTwoAnswersLeft));
+            Console.ResetColor();
         }
 
         // Draw labyrinth
