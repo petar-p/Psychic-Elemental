@@ -114,10 +114,12 @@
 
                 // Draw game field
                 DrawBorders();
+
                 PrintPlayerInfo();
 
                 // Draw Labyrinth
                 DrawLabyrinth();
+
                 PrintPlayersNextPosition();
 
                 PrintAnswersToWin();
@@ -137,7 +139,7 @@
                         continue;
                     }
                 }
-
+                
                 GenerateQuestion();
 
                 Player1Movement();
@@ -148,11 +150,6 @@
 
             GameOver();
 
-            ////Added Timer
-            //TimerCallback callback = new TimerCallback(Tick);
-            //Timer stateTimer = new Timer(callback, null, 0, 1000);
-            ////waiting for the user to press any button
-            //Console.ReadLine();
         }
 
         static void PrintMenu()
@@ -560,11 +557,6 @@
                 Console.SetCursorPosition(col, row);
                 Console.Write(text);
             }
-        }
-
-        static void Tick(Object stateInfo)
-        {
-            Console.Write("\rTick Tack: {0}", DateTime.Now.ToString("h:mm:ss"));
         }
     }
 }
