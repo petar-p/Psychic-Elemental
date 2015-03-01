@@ -81,15 +81,15 @@
             { 8, 106},
             { 8, 94},
             { 3, 94}
-        };        
+        };
 
         static void Main()
         {
             // Setting Game Title
-            Console.Title = "C# Scramble";            
+            Console.Title = "C# Scramble";
 
             // Set Encoding
-            Console.OutputEncoding = Encoding.UTF8;            
+            Console.OutputEncoding = Encoding.UTF8;
 
             // Removing unusable space
             Console.WindowWidth = GameWidth;
@@ -110,7 +110,7 @@
 
             while (true)
             {
-                Console.CursorVisible = false;               
+                Console.CursorVisible = false;
 
                 // Draw game field
                 DrawBorders();
@@ -140,10 +140,10 @@
 
                 GenerateQuestion();
 
-                Player1Movement();                
-                Player2Movement();              
+                Player1Movement();
+                Player2Movement();
 
-                Console.Clear();            
+                Console.Clear();
             }
 
             GameOver();
@@ -185,12 +185,12 @@
 
         // Anouncing the winner and GAME OVER!
         static void GameOver()
-        {     
+        {
             //DrawMenuScreen();
 
             string announceWinner = "THE WINNER IS:";
             string gameOver = "GAME OVER !";
-            int startposition = GameWidth / 2 - ((announceWinner.Length - 1) / 2) +  InfoPanelWidth/2 + 1;
+            int startposition = GameWidth / 2 - ((announceWinner.Length - 1) / 2) + InfoPanelWidth / 2 + 1;
             int startposition1 = GameWidth / 2 - (p1Input.Length - 1) / 2 + InfoPanelWidth / 2 + 1;
             int startposition2 = GameWidth / 2 - (p2Input.Length - 1) / 2 + InfoPanelWidth / 2 + 1;
             int startposition3 = GameWidth / 2 - (gameOver.Length - 1) / 2 + InfoPanelWidth / 2 + 1;
@@ -200,19 +200,19 @@
 
             // Announce player 1 as winner 
             if (winnerP1)
-            {               
+            {
                 Console.ForegroundColor = ConsoleColor.White;
                 Print(12, startposition1, p1Input);
             }// Announce player 2 is winner
-            else if(winnerP2)
-	        {
+            else if (winnerP2)
+            {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Print(12, startposition2, p2Input);
-	        }
+            }
 
             // Print GAME OVER!
             Console.ForegroundColor = ConsoleColor.Green;
-            Print(14, startposition3, gameOver);            
+            Print(14, startposition3, gameOver);
         }
 
         // Check for winner
@@ -222,7 +222,7 @@
             {
                 // GAME OVER! The winner in Player 1
                 winnerP1 = true;    // flag that Player 1 is winner
-                isThereAWinner = true;                
+                isThereAWinner = true;
             }
             else if (p2Move == 13 && p1Move != 13)
             {
@@ -239,14 +239,14 @@
             }
 
             return isThereAWinner;
-        }        
+        }
 
         // Print players next positions
         static void PrintPlayersNextPosition()
         {
             Console.ForegroundColor = ConsoleColor.White;
             Print(p1MovementCoords[p1Move, 0], p1MovementCoords[p1Move, 1], player1Character);
-            
+
             Console.ForegroundColor = ConsoleColor.Red;
             Print(p2MovementCoords[p2Move, 0], p2MovementCoords[p2Move, 1], player2Character);
         }
@@ -286,12 +286,12 @@
         // Print players info
         static void PrintPlayerInfo()
         {
-            
+
             string player1Label = "PLAYER 1:";
             string player2Label = "PLAYER 2:";
 
             Console.ForegroundColor = ConsoleColor.Green;
-            Print(3, 8, player1Label);            
+            Print(3, 8, player1Label);
             Print(3, 45, player2Label);
 
             Console.ForegroundColor = ConsoleColor.White;
@@ -347,13 +347,33 @@
         static bool IsAnsweredCorrect(char key)
         {
             ConsoleKeyInfo pressedKey = Console.ReadKey();
+            char playerChoice = char.ToLower(pressedKey.KeyChar);
 
-            if (pressedKey.KeyChar == key)
+            if (!IsValidAnswer(playerChoice))
+            {
+                throw new ArgumentException("Invalid input. You must choose a, b, c or d... ");
+            }
+
+            if (playerChoice == char.ToLower(key))
             {
                 return true;
             }
 
             return false;
+        }
+
+        static bool IsValidAnswer(char inputKey)
+        {
+            switch (inputKey)
+            {
+                case 'a':
+                case 'b':
+                case 'c':
+                case 'd':
+                    return true;
+                default:
+                    return false;
+            }
         }
 
         // Generate question
@@ -413,30 +433,43 @@
             Print(19, 9, question1.correctAnswer);
 
             Console.ForegroundColor = ConsoleColor.White;
-            Print(22, 5, "Player 1, choose an answer .. ");            
+            Print(22, 5, "Player 1, choose an answer .. ");
+            var validPlayerOneInput = false;
 
-            if (IsAnsweredCorrect(question1.correctAnswer))
+            do
             {
-                p1Answer = true;
-            }
-            else
-            {
+                try
+                {
+                    p1Answer = IsAnsweredCorrect(question1.correctAnswer);
+                    validPlayerOneInput = true;
+                }
+                catch (ArgumentException ex)
+                {
+                    Print(23, 5, ex.Message);
+                    validPlayerOneInput = false;
+                }
 
-                p1Answer = false;
-            }
+            } while (!validPlayerOneInput);
 
             Console.ForegroundColor = ConsoleColor.Red;
             Print(24, 5, "Player 2, choose an answer .. ");
 
-            if (IsAnsweredCorrect(question1.correctAnswer))
-            {
-                p2Answer = true;
-            }
-            else
-            {
+            var validPlayerTwoInput = false;
 
-                p2Answer = false;
-            }
+            do
+            {
+                try
+                {
+                    p1Answer = IsAnsweredCorrect(question1.correctAnswer);
+                    validPlayerTwoInput = true;
+                }
+                catch (ArgumentException ex)
+                {
+                    Print(25, 5, ex.Message);
+                    validPlayerTwoInput = false;
+                }
+
+            } while (!validPlayerTwoInput);
 
             string correctAns = "The correct answer is: {0}";
 
@@ -467,7 +500,7 @@
                 Print(row, 0, BorderCharacterVertical); // Left border
 
                 Print(row, FieldWidth + 1 + InfoPanelWidth + 1, BorderCharacterVertical);  // Right border
-            } 
+            }
         }
 
         // Draw borders
@@ -533,7 +566,5 @@
         {
             Console.Write("\rTick Tack: {0}", DateTime.Now.ToString("h:mm:ss"));
         }
-
-
     }
 }
