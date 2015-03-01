@@ -457,7 +457,7 @@
             {
                 try
                 {
-                    p1Answer = IsAnsweredCorrect(question1.correctAnswer);
+                    p2Answer = IsAnsweredCorrect(question1.correctAnswer);
                     validPlayerTwoInput = true;
                 }
                 catch (ArgumentException ex)
