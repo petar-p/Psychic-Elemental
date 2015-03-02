@@ -4,8 +4,6 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
-    using System.Threading;
-    using System.Threading.Tasks;
     using System.IO;
 
     class ConsoleGame
@@ -44,6 +42,8 @@
         static int questionCounter = 0; // question counter
         static int p1Move = 0;
         static int p2Move = 0;
+
+        static Random randomGenerator = new Random();
 
         // Coordinates of Player 1 moving positions on the map
         static int[,] p1MovementCoords = new int[,] 
@@ -138,7 +138,7 @@
                     else
                     {
                         // Both players are at the end of the labyrinth, that means equal score
-
+                        GameOver();
                         // TODO: Decide how to name the winner... penalties or something else
                         continue;
                     }
@@ -155,6 +155,7 @@
             GameOver();
             Console.ReadLine();
             Console.Clear();
+
             PrintCredits();
             Console.ReadLine();
 
@@ -315,19 +316,19 @@
         {
             if (p1Move == 13 && p2Move != 13)
             {
-                // GAME OVER! The winner in Player 1
+                // GAME OVER! The winner is Player 1
                 winnerP1 = true;    // flag that Player 1 is winner
                 isThereAWinner = true;
             }
             else if (p2Move == 13 && p1Move != 13)
             {
-                // GAME OVER! The winner in Player 2
+                // GAME OVER! The winner is Player 2
                 winnerP2 = true;    // flag that Player 2 is winner
                 isThereAWinner = true;
             }
             else if (p1Move == 13 && p2Move == 13)
             {
-                // Both players are at the end of the labyrinth, that means equal score
+                // Both players are at the end of the labyrinth, that means equal score                
 
                 // TODO: Decide how to name the winner... penalties or something else
                 isThereAWinner = false;
@@ -485,8 +486,7 @@
             //creates a new Question
             Question question1 = new Question();
 
-            //randomizes starting positions
-            Random randomGenerator = new Random();
+            //randomizes starting positions            
             int rnd = randomGenerator.Next(questionStartPositions.Count);
             int position = questionStartPositions[rnd];
 
@@ -523,8 +523,7 @@
             PrintQuestion(15, 9, question1.c, FieldWidth - 10);
             PrintQuestion(17, 9, question1.d, FieldWidth - 10);
 
-            // 
-
+            // Printing the correct answer - Presentation goodie
             Print(19, 9, question1.correctAnswer);
 
             Console.ForegroundColor = ConsoleColor.White;
