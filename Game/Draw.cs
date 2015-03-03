@@ -317,6 +317,11 @@
             Console.ForegroundColor = ConsoleColor.Red;
             Questions.Print(37, 30, Questions.p2TiebreakScore);
         }
+
+        public static void DrawTimer(TimeSpan difference)
+        {
+            Questions.Print(6, 18, string.Format("Game ended in {0} min. {1} sec. ", difference.Minutes, difference.Seconds));
+        }
         
     }
 }

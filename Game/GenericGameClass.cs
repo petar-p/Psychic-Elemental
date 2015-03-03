@@ -22,6 +22,8 @@
 
             //Start timer
             DateTime start;
+            DateTime end;
+            TimeSpan difference;
 
             // Set Encoding
             Console.OutputEncoding = Encoding.UTF8;
@@ -133,7 +135,12 @@
                             Draw.PrintTieBreakScore();
 
                             Console.ForegroundColor = ConsoleColor.White;
-                            Questions.Print(39, 14, "GAME OVER ! THE WINNER IS: " + Questions.p1Input);                            
+                            Questions.Print(39, 14, "GAME OVER ! THE WINNER IS: " + Questions.p1Input);
+                            
+                            //end Timer
+                            end = DateTime.Now;
+                            difference = end - start;
+                            Draw.DrawTimer(difference);
 
                             Thread.Sleep(28000);
                             Console.Clear();
@@ -163,7 +170,12 @@
                             Draw.PrintTieBreakScore();
 
                             Console.ForegroundColor = ConsoleColor.Red;
-                            Questions.Print(39, 14, "GAME OVER ! THE WINNER IS: " + Questions.p2Input);                            
+                            Questions.Print(39, 14, "GAME OVER ! THE WINNER IS: " + Questions.p2Input);
+
+                            //end Timer
+                            end = DateTime.Now;
+                            difference = end - start;
+                            Draw.DrawTimer(difference);
 
                             Thread.Sleep(28000);
                             Console.Clear();
@@ -197,9 +209,9 @@
 
             Draw.GameOver();
             //end Timer
-            DateTime end = DateTime.Now;
-            TimeSpan difference = end - start;
-            Questions.Print(6, 18, string.Format("Game ended in {0} min. {1} sec. ", difference.Minutes, difference.Seconds));
+            end = DateTime.Now;
+            difference = end - start;
+            Draw.DrawTimer(difference);
             Console.ReadLine();
 
             Thread.Sleep(28000);
