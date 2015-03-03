@@ -54,7 +54,7 @@
 
             Questions.Print(Console.WindowHeight - 2, startposition, developedBy);
             Questions.Print(Console.WindowHeight - 1, startposition1, telerikAcademy);
-            Console.ReadLine();//Thread.Sleep(13000);
+            Thread.Sleep(13000);
         }
 
         // Draw labyrinth

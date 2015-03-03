@@ -21,8 +21,7 @@
             Console.Title = "C# Scramble";
 
             //Start timer
-            DateTime start = new DateTime();
-            start = DateTime.Now;
+            DateTime start;
 
             // Set Encoding
             Console.OutputEncoding = Encoding.UTF8;
@@ -49,6 +48,7 @@
             Draw.PrintMenu();
 
             Console.Clear();
+            start = DateTime.Now;
 
             Console.ForegroundColor = ConsoleColor.White;
             Questions.Print(38, 90, Movement.player1Character);
@@ -178,12 +178,11 @@
             }
 
             Draw.GameOver();
-            Console.ReadLine();
             //end Timer
-            DateTime end = new DateTime();
-            end = DateTime.Now;
+            DateTime end = DateTime.Now;
             TimeSpan difference = end - start;
-            Console.WriteLine("    GAME TIME: " + difference);
+            Questions.Print(6, 18, string.Format("Game ended in {0} min. {1} sec. ", difference.Minutes, difference.Seconds));
+            Console.ReadLine();
 
             Thread.Sleep(28000);
             Console.Clear();
