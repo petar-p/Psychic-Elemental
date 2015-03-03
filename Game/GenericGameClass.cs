@@ -54,7 +54,7 @@
                 Draw.PrintAnswersToWin();
 
                 // Check for winner
-                if (Movement.p1Move == 13 || Movement.p2Move == 13)
+                if ((Movement.p1Move == 13 || Movement.p2Move == 13) &&  Questions.questionCounterp2==Questions.questionCounterp1 )
                 {
                     if (Movement.CheckForWinner())
                     {
