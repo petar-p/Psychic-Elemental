@@ -33,16 +33,18 @@
         static string p1Input;
         static string p2Input;
 
-        static bool p1Answer = false;
-        static bool p2Answer = false;
+        static bool playerAnswer = false;
+        //static bool p2Answer = false;
         static bool isThereAWinner = false;
         static bool winnerP1 = false;
         static bool winnerP2 = false;
 
-        static int questionCounter = 0; // question counter
+        static int questionCounterp1 = 0; // question counter
+        static int questionCounterp2 = 0; // question counter
         static int p1Move = 0;
         static int p2Move = 0;
 
+        static int turnOfPLayer = 0;
         static Random randomGenerator = new Random();
 
         // Coordinates of Player 1 moving positions on the map
@@ -111,7 +113,8 @@
             Print(38, 90, player1Character);
             Console.ForegroundColor = ConsoleColor.Red;
             Print(38, 94, player2Character);
-
+            
+            
             while (true)
             {
                 Console.CursorVisible = false;
@@ -123,9 +126,7 @@
 
                 // Draw Labyrinth
                 DrawLabyrinth();
-
                 PrintPlayersNextPosition();
-
                 PrintAnswersToWin();
 
                 // Check for winner
@@ -144,10 +145,22 @@
                     }
                 }
                 
-                GenerateQuestion();
 
-                Player1Movement();
-                Player2Movement();
+                if (turnOfPLayer%2==0)
+                {
+                    GenerateQuestion(p1Input,turnOfPLayer);
+                    PlayerMovement(turnOfPLayer);
+                }
+                if (turnOfPLayer%2==1)
+                {
+                    GenerateQuestion(p2Input,turnOfPLayer);
+                    PlayerMovement(turnOfPLayer);
+                }
+
+                turnOfPLayer++;
+
+                
+               
 
                 Console.Clear();
             }
@@ -347,37 +360,42 @@
             Print(p2MovementCoords[p2Move, 0], p2MovementCoords[p2Move, 1], player2Character);
         }
 
-        static void Player1Movement()
+        static void PlayerMovement(int turn)
         {
-            if (p1Answer)
+            if (turn%2==0)
             {
-                p1Move++;
-            }
-            else
-            {
-                p1Move--;
-                if (p1Move < 0)
+                if (playerAnswer)
                 {
-                    p1Move = 0;
+                    p1Move++;
+                }
+                else
+                {
+                    p1Move--;
+                    if (p1Move < 0)
+                    {
+                        p1Move = 0;
+                    }
                 }
             }
+            if (turn%2==1)
+            {
+                if (playerAnswer)
+                {
+                    p2Move++;
+                }
+                else
+                {
+                    p2Move--;
+                    if (p2Move < 0)
+                    {
+                        p2Move = 0;
+                    }
+                }
+                
+            }
+       
         }
 
-        static void Player2Movement()
-        {
-            if (p2Answer)
-            {
-                p2Move++;
-            }
-            else
-            {
-                p2Move--;
-                if (p2Move < 0)
-                {
-                    p2Move = 0;
-                }
-            }
-        }
 
         // Print players info
         static void PrintPlayerInfo()
@@ -473,9 +491,17 @@
         }
 
         // Generate question
-        static void GenerateQuestion()
+        static void GenerateQuestion( string playerName, int playerInfo)
         {
-            questionCounter++;
+            if (playerInfo%2==0)
+            {
+                questionCounterp1++; 
+            }
+            if (playerInfo%2==1)
+            {
+                questionCounterp2++;
+            }
+            
 
             //creates a list with starting points for all of the questions
             List<int> questionStartPositions = new List<int>();
@@ -512,7 +538,14 @@
 
             Console.ForegroundColor = ConsoleColor.Gray;
 
-            Print(7, 5, "Question: " + questionCounter);
+            if (playerInfo % 2 == 0)
+            {
+                Print(7, 5, "Question: " + questionCounterp1);
+            }
+            if (playerInfo % 2 == 1)
+            {
+                Print(7, 5, "Question: " + questionCounterp2);
+            }            
 
             Console.ForegroundColor = ConsoleColor.Green;
             PrintQuestion(9, 5, question1.text, FieldWidth - 5);
@@ -527,14 +560,14 @@
             Print(19, 9, question1.correctAnswer);
 
             Console.ForegroundColor = ConsoleColor.White;
-            Print(22, 5, "Player 1, choose an answer .. ");
+            Print(22, 5, playerName + ", choose an answer .. ");
             var validPlayerOneInput = false;
 
             do
             {
                 try
                 {
-                    p1Answer = IsAnsweredCorrect(question1.correctAnswer);
+                    playerAnswer = IsAnsweredCorrect(question1.correctAnswer);
                     validPlayerOneInput = true;
                 }
                 catch (ArgumentException ex)
@@ -544,29 +577,9 @@
                 }
 
             } while (!validPlayerOneInput);
-
-            Console.ForegroundColor = ConsoleColor.Red;
-            Print(24, 5, "Player 2, choose an answer .. ");
-
-            var validPlayerTwoInput = false;
-
-            do
-            {
-                try
-                {
-                    p2Answer = IsAnsweredCorrect(question1.correctAnswer);
-                    validPlayerTwoInput = true;
-                }
-                catch (ArgumentException ex)
-                {
-                    Print(25, 5, ex.Message);
-                    validPlayerTwoInput = false;
-                }
-
-            } while (!validPlayerTwoInput);
+                     
 
             string correctAns = "The correct answer is: {0}";
-
             Console.ForegroundColor = ConsoleColor.Green;
             Print(26, 5, String.Format(correctAns, question1.correctAnswer));
 
