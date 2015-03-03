@@ -54,7 +54,7 @@
 
             Questions.Print(Console.WindowHeight - 2, startposition, developedBy);
             Questions.Print(Console.WindowHeight - 1, startposition1, telerikAcademy);
-            Thread.Sleep(13000);
+            Console.ReadLine();//Thread.Sleep(13000);
         }
 
         // Draw labyrinth
@@ -273,14 +273,14 @@
             Questions.Print(11, startposition1 - 1, ' ');
 
             Console.ForegroundColor = ConsoleColor.White;
-            Questions.p1Input = Console.ReadLine();
+            Questions.p1Input = PlayerNameValidator.ReadValidName(10, startposition1 + 21);
 
             Console.ForegroundColor = ConsoleColor.Green;
             Questions.Print(13, startposition1, player2Name);
             Questions.Print(14, startposition1 - 1, ' ');
 
             Console.ForegroundColor = ConsoleColor.Red;
-            Questions.p2Input = Console.ReadLine();
+            Questions.p2Input = PlayerNameValidator.ReadValidName(13, startposition1 + 21); ;
         }
 
         // Print tiebreak
