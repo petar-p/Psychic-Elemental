@@ -87,6 +87,13 @@
                     }
                     else
                     {
+                        Console.Clear();
+                        Draw.DrawBorders();
+                        Draw.PrintPlayerInfo();
+                        Draw.DrawLabyrinth();
+                        Movement.PrintPlayersNextPosition();
+
+
                         // Both players are at the end of the labyrinth, that means equal score
                         if ((Movement.p1Move > 13 || Movement.p2Move > 13))
                         {
@@ -95,13 +102,14 @@
                         }
                         
                         Draw.Tiebreak();
+                        Draw.PrintTieBreakScore();
                         Questions.GenerateQuestion();
                         Draw.PrintTieBreakScore();
 
                         if (Questions.p1Answer == true && Questions.p2Answer == true)
                         {
-                            Questions.p1TiebreakScore++;
-                            Questions.p2TiebreakScore++;
+                            ++Questions.p1TiebreakScore;
+                            ++Questions.p2TiebreakScore;
                         }
 
                         Draw.PrintTieBreakScore();
@@ -120,7 +128,12 @@
                                 // Play Sound alond with game play
                                 Draw.winnerAnnounce.Play();
                             });
-                            Questions.Print(39, 23, "GAME OVER ! THE WINNER IS: " + Questions.p1Input);                            
+
+                            ++Questions.p1TiebreakScore;
+                            Draw.PrintTieBreakScore();
+
+                            Console.ForegroundColor = ConsoleColor.White;
+                            Questions.Print(39, 14, "GAME OVER ! THE WINNER IS: " + Questions.p1Input);                            
 
                             Thread.Sleep(28000);
                             Console.Clear();
@@ -134,7 +147,7 @@
 
                             Draw.PrintCredits();
                             Console.ReadLine();
-
+                            Environment.Exit(0);
                         }
                         else if (Questions.p1Answer == false && Questions.p2Answer == true)
                         {
@@ -146,7 +159,11 @@
                                 Draw.winnerAnnounce.Play();
                             });
 
-                            Questions.Print(39, 23, "GAME OVER ! THE WINNER IS: " + Questions.p2Input);                            
+                            ++Questions.p2TiebreakScore;
+                            Draw.PrintTieBreakScore();
+
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Questions.Print(39, 14, "GAME OVER ! THE WINNER IS: " + Questions.p2Input);                            
 
                             Thread.Sleep(28000);
                             Console.Clear();
@@ -160,6 +177,7 @@
 
                             Draw.PrintCredits();
                             Console.ReadLine();
+                            Environment.Exit(0);
                         }
                         else
                         {
