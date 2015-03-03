@@ -5,6 +5,9 @@
     using System.Linq;
     using System.Text;
     using System.IO;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using System.Media;
 
     public class Questions
     {
@@ -26,27 +29,23 @@
 
         public static string p1Input;
         public static string p2Input;
-        public static bool playerAnswer = false;
-        //static bool p2Answer = false;
+        public static bool p1Answer = false;
+        public static bool p2Answer = false;
         public static bool isThereAWinner = false;
 
-        public static int questionCounterp1 = 0; // question counter
-        public static int questionCounterp2 = 0; // question counter
-        public static int turnOfPLayer = 0;
+        public static int questionCounter = 0;
+        public static int p1TiebreakScore = 0;
+        public static int p2TiebreakScore = 0;
+        
         public static Random randomGenerator = new Random();
 
-        // Generate question
-        public static void GenerateQuestion(string playerName, int playerInfo)
-        {
-            if (playerInfo % 2 == 0)
-            {
-                questionCounterp1++;
-            }
-            if (playerInfo % 2 == 1)
-            {
-                questionCounterp2++;
-            }
+        public static SoundPlayer markedAnswers = new SoundPlayer(@"..\..\sounds\marked-answers.wav");
+        public static SoundPlayer correctAnswer = new SoundPlayer(@"..\..\sounds\correct-answer.wav");
 
+        // Generate question
+        public static void GenerateQuestion()
+        {
+            questionCounter++;
 
             //creates a list with starting points for all of the questions
             List<int> questionStartPositions = new List<int>();
@@ -57,7 +56,8 @@
             //creates a new Question
             Question question1 = new Question();
 
-            //randomizes starting positions            
+            //randomizes starting positions
+            Random randomGenerator = new Random();
             int rnd = randomGenerator.Next(questionStartPositions.Count);
             int position = questionStartPositions[rnd];
 
@@ -83,14 +83,7 @@
 
             Console.ForegroundColor = ConsoleColor.Gray;
 
-            if (playerInfo % 2 == 0)
-            {
-                Print(7, 5, "Question: " + questionCounterp1);
-            }
-            if (playerInfo % 2 == 1)
-            {
-                Print(7, 5, "Question: " + questionCounterp2);
-            }
+            Print(7, 5, "Question: " + questionCounter);
 
             Console.ForegroundColor = ConsoleColor.Green;
             PrintQuestion(9, 5, question1.text, FieldWidth - 5);
@@ -101,18 +94,17 @@
             PrintQuestion(15, 9, question1.c, FieldWidth - 10);
             PrintQuestion(17, 9, question1.d, FieldWidth - 10);
 
-            // Printing the correct answer - Presentation goodie
             Print(19, 9, question1.correctAnswer);
 
             Console.ForegroundColor = ConsoleColor.White;
-            Print(22, 5, playerName + ", choose an answer .. ");
+            Print(22, 5,  p1Input + ", choose an answer .. ");
             var validPlayerOneInput = false;
 
             do
             {
                 try
                 {
-                    playerAnswer = IsAnsweredCorrect(question1.correctAnswer);
+                    p1Answer = IsAnsweredCorrect(question1.correctAnswer);
                     validPlayerOneInput = true;
                 }
                 catch (ArgumentException ex)
@@ -123,14 +115,52 @@
 
             } while (!validPlayerOneInput);
 
+            Console.ForegroundColor = ConsoleColor.Red;
+            Print(24, 5, p2Input + ", choose an answer .. ");
+
+            var validPlayerTwoInput = false;
+
+            do
+            {
+                try
+                {
+                    p2Answer = IsAnsweredCorrect(question1.correctAnswer);
+                    validPlayerTwoInput = true;
+                }
+                catch (ArgumentException ex)
+                {
+                    Print(25, 5, ex.Message);
+                    validPlayerTwoInput = false;
+                }
+
+            } while (!validPlayerTwoInput);
+
+            markedAnswers.Play();
+            Thread.Sleep(1500);
 
             string correctAns = "The correct answer is: {0}";
+
+            Thread.Sleep(1500);
+
+            Task.Run(() =>
+            {
+                // Use the code below parallel with the other code of the program
+                // Play Sound alond with game play
+                correctAnswer.Play();
+            });
+
             Console.ForegroundColor = ConsoleColor.Green;
             Print(26, 5, String.Format(correctAns, question1.correctAnswer));
 
             Console.ForegroundColor = ConsoleColor.Gray;
-            Print(28, 5, "Next question ..");
-            Console.ReadLine();
+            Print(28, 5, "Next question ");
+            Thread.Sleep(1500);
+            Print(28, 18, " .");
+            Thread.Sleep(1000);
+            Print(28, 20, " .");
+            Thread.Sleep(1000);
+            Print(28, 22, " .");
+            Thread.Sleep(1250);      
         }
 
         // Printing on custom position

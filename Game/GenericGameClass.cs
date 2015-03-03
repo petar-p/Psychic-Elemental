@@ -5,9 +5,16 @@
     using System.Linq;
     using System.Text;
     using System.IO;
+    using System.Media;
+    using System.Threading.Tasks;
+    using System.Threading;
 
     class GenericGameClass
     {
+        public static SoundPlayer introSound = new SoundPlayer(@"..\..\sounds\intro.wav");
+        public static SoundPlayer ambienceSound = new SoundPlayer(@"..\..\sounds\ambience.wav");
+        public static SoundPlayer endCredits = new SoundPlayer(@"..\..\sounds\end.wav");     
+
         public static void Main()
         {
             // Setting Game Title
@@ -21,6 +28,13 @@
             Console.BufferWidth = Questions.GameWidth;
             Console.WindowHeight = Questions.GameHeight + 2;
             Console.BufferHeight = Questions.GameHeight + 2;
+
+            Task.Run(() =>
+            {
+                // Use the code below parallel with the other code of the program
+                // Play Sound alond with game play
+                introSound.Play();
+            });
 
             Draw.DrawMenuScreen();
             Draw.DrawLogo();
@@ -46,6 +60,13 @@
 
                 Draw.PrintPlayerInfo();
 
+                Task.Run(() =>
+                {
+                    // Use the code below parallel with the other code of the program
+                    // Play Sound alond with game play
+                    ambienceSound.PlayLooping();
+                });
+
                 // Draw Labyrinth
                 Draw.DrawLabyrinth();
 
@@ -54,7 +75,7 @@
                 Draw.PrintAnswersToWin();
 
                 // Check for winner
-                if ((Movement.p1Move == 13 || Movement.p2Move == 13) &&  Questions.questionCounterp2==Questions.questionCounterp1 )
+                if ((Movement.p1Move == 13 || Movement.p2Move == 13))
                 {
                     if (Movement.CheckForWinner())
                     {
@@ -63,31 +84,105 @@
                     else
                     {
                         // Both players are at the end of the labyrinth, that means equal score
-                        Draw.GameOver();
-                        // TODO: Decide how to name the winner... penalties or something else
-                        continue;
+                        if ((Movement.p1Move > 13 || Movement.p2Move > 13))
+                        {
+                            Movement.p1Move = 13;
+                            Movement.p2Move = 13;
+                        }
+                        
+                        Draw.Tiebreak();
+                        Questions.GenerateQuestion();
+                        Draw.PrintTieBreakScore();
+
+                        if (Questions.p1Answer == true && Questions.p2Answer == true)
+                        {
+                            Questions.p1TiebreakScore++;
+                            Questions.p2TiebreakScore++;
+                        }
+
+                        Draw.PrintTieBreakScore();
+
+                        // Both players answered correct and the tiebreak continues
+                        if (Questions.p1Answer == true && Questions.p2Answer == true)
+                        {
+                            continue;
+                        }
+                        else if (Questions.p1Answer == true && Questions.p2Answer == false)
+                        {
+                            // Player 1 wins the tie break and the game
+                            Task.Run(() =>
+                            {
+                                // Use the code below parallel with the other code of the program
+                                // Play Sound alond with game play
+                                Draw.winnerAnnounce.Play();
+                            });
+                            Questions.Print(39, 23, "GAME OVER ! THE WINNER IS: " + Questions.p1Input);                            
+
+                            Thread.Sleep(28000);
+                            Console.Clear();
+
+                            Task.Run(() =>
+                            {
+                                // Use the code below parallel with the other code of the program
+                                // Play Sound alond with game play
+                                endCredits.Play();
+                            });
+
+                            Draw.PrintCredits();
+                            Console.ReadLine();
+
+                        }
+                        else if (Questions.p1Answer == false && Questions.p2Answer == true)
+                        {
+                            // Player 2 wins the tiebreak and the game
+                            Task.Run(() =>
+                            {
+                                // Use the code below parallel with the other code of the program
+                                // Play Sound alond with game play
+                                Draw.winnerAnnounce.Play();
+                            });
+
+                            Questions.Print(39, 23, "GAME OVER ! THE WINNER IS: " + Questions.p2Input);                            
+
+                            Thread.Sleep(28000);
+                            Console.Clear();
+
+                            Task.Run(() =>
+                            {
+                                // Use the code below parallel with the other code of the program
+                                // Play Sound alond with game play
+                                endCredits.Play();
+                            });
+
+                            Draw.PrintCredits();
+                            Console.ReadLine();
+                        }
+                        else
+                        {
+                            // Both players gave wrong answers answers and the tiebreak continues
+                            continue;
+                        }
                     }
                 }
+                
+                Questions.GenerateQuestion();
 
-                if (Questions.turnOfPLayer % 2 == 0)
-                {
-                    Questions.GenerateQuestion(Questions.p1Input, Questions.turnOfPLayer);
-                    Movement.PlayerMovement(Questions.turnOfPLayer);
-                }
-                if (Questions.turnOfPLayer % 2 == 1)
-                {
-                    Questions.GenerateQuestion(Questions.p2Input, Questions.turnOfPLayer);
-                    Movement.PlayerMovement(Questions.turnOfPLayer);
-                }
-
-                Questions.turnOfPLayer++;
+                Movement.Player1Movement();
+                Movement.Player2Movement();                
 
                 Console.Clear();
             }
 
             Draw.GameOver();
-            Console.ReadLine();
+            Thread.Sleep(28000);
             Console.Clear();
+
+            Task.Run(() =>
+            {
+                // Use the code below parallel with the other code of the program
+                // Play Sound alond with game play
+                endCredits.Play();
+            });
 
             Draw.PrintCredits();
             Console.ReadLine();

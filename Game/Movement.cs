@@ -18,6 +18,8 @@
         public static int p1Move = 0;
         public static int p2Move = 0;
 
+        // Coordinates of players moving positions
+        #region
         // Coordinates of Player 1 moving positions on the map
         public static int[,] p1MovementCoords = new int[,] 
         {
@@ -55,6 +57,7 @@
             { 8, 94},
             { 3, 94}
         };
+        #endregion
 
         // Print players next positions
         public static void PrintPlayersNextPosition()
@@ -66,41 +69,37 @@
             Questions.Print(p2MovementCoords[p2Move, 0], p2MovementCoords[p2Move, 1], player2Character);
         }
 
-        public static void PlayerMovement(int turn)
+        public static void Player1Movement()
+        {            
+            if (Questions.p1Answer)
+            {
+                p1Move++;
+            }
+            else
+            {
+                p1Move--;
+                if (p1Move < 0)
+                {
+                    p1Move = 0;
+                }
+            }
+        }    
+         
+        public static void Player2Movement()
         {
-            if (turn % 2 == 0)
+            if (Questions.p2Answer)
             {
-                if (Questions.playerAnswer)
+                p2Move++;
+            }
+            else
+            {
+                p2Move--;
+                if (p2Move < 0)
                 {
-                    p1Move++;
-                }
-                else
-                {
-                    p1Move--;
-                    if (p1Move < 0)
-                    {
-                        p1Move = 0;
-                    }
+                    p2Move = 0;
                 }
             }
-            if (turn % 2 == 1)
-            {
-                if (Questions.playerAnswer)
-                {
-                    p2Move++;
-                }
-                else
-                {
-                    p2Move--;
-                    if (p2Move < 0)
-                    {
-                        p2Move = 0;
-                    }
-                }
-
-            }
-
-        }
+        }   
 
         // Check for winner
         public static bool CheckForWinner()

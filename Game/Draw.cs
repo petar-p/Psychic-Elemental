@@ -5,11 +5,16 @@
     using System.Linq;
     using System.Text;
     using System.IO;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using System.Media;
 
     class Draw
     {
         public const char BorderCharacterVertical = '\u2588';     // vertical border character
         public const char BorderCharacterHorizontal = '\u2588';   // horizontal border character
+
+        public static SoundPlayer winnerAnnounce = new SoundPlayer(@"..\..\sounds\winner.wav");
 
         // Draw intro Logo
         public static void DrawLogo()
@@ -49,7 +54,7 @@
 
             Questions.Print(Console.WindowHeight - 2, startposition, developedBy);
             Questions.Print(Console.WindowHeight - 1, startposition1, telerikAcademy);
-            Console.ReadLine();
+            Thread.Sleep(13000);
         }
 
         // Draw labyrinth
@@ -76,7 +81,7 @@
             {
                 for (int col = 0; col < map.GetLength(1); col++)
                 {
-                    Console.ForegroundColor = ConsoleColor.DarkCyan;
+                    Console.ForegroundColor = ConsoleColor.Green;
                     Questions.Print(rowCounter, Questions.FieldWidth + 6, map[row, col]);
                 }
                 rowCounter++;
@@ -165,7 +170,7 @@
             Questions.Print(18, startposition1 + 25, "(eudaimonia)");
 
             Questions.Print(19, startposition1 - 5, "SVETOSLAV IVANOV");
-            Questions.Print(19, startposition1 + 25, "(Inxslackware)");
+            Questions.Print(19, startposition1 + 25, "(Lnxslackware)");
 
             Questions.Print(20, startposition1 - 5, "VYARA HRISTOVA");
             Questions.Print(20, startposition1 + 25, "(vyarah)");
@@ -179,7 +184,6 @@
         public static void GameOver()
         {
             //DrawMenuScreen();
-
             string announceWinner = "THE WINNER IS:";
             string gameOver = "GAME OVER !";
             int startposition = Questions.GameWidth / 2 - ((announceWinner.Length - 1) / 2) + Questions.InfoPanelWidth / 2 + 1;
@@ -193,11 +197,25 @@
             // Announce player 1 as winner 
             if (Movement.winnerP1)
             {
+                Task.Run(() =>
+                {
+                    // Use the code below parallel with the other code of the program
+                    // Play Sound alond with game play
+                    winnerAnnounce.Play();
+                });
+
                 Console.ForegroundColor = ConsoleColor.White;
                 Questions.Print(12, startposition1, Questions.p1Input);
             }// Announce player 2 is winner
             else if (Movement.winnerP2)
             {
+                Task.Run(() =>
+                {
+                    // Use the code below parallel with the other code of the program
+                    // Play Sound alond with game play
+                    winnerAnnounce.Play();
+                });
+
                 Console.ForegroundColor = ConsoleColor.Red;
                 Questions.Print(12, startposition2, Questions.p2Input);
             }
@@ -264,5 +282,41 @@
             Console.ForegroundColor = ConsoleColor.Red;
             Questions.p2Input = Console.ReadLine();
         }
+
+        // Print tiebreak
+        public static void Tiebreak()
+        {
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            for (int i = 4; i < 58; i++)
+            {
+                Questions.Print(31, i, "-");
+            }           
+
+            Questions.Print(33, 26, "TIEBREAK:");            
+
+            string player1Label = "PLAYER 1:";
+            string player2Label = "PLAYER 2:";
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Questions.Print(35, 8, player1Label);
+            Questions.Print(35, 45, player2Label);
+
+            Console.ForegroundColor = ConsoleColor.White;
+            Questions.Print(36, 8, Questions.p1Input);
+
+            Console.ForegroundColor = ConsoleColor.Red;
+            Questions.Print(36, 45, Questions.p2Input);
+        }
+
+        public static void PrintTieBreakScore()
+        {
+            Console.ForegroundColor = ConsoleColor.White;
+            Questions.Print(37, 26, Questions.p1TiebreakScore + " - ");
+
+            Console.ForegroundColor = ConsoleColor.Red;
+            Questions.Print(37, 30, Questions.p2TiebreakScore);
+        }
+        
     }
 }
