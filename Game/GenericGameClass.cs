@@ -20,6 +20,10 @@
             // Setting Game Title
             Console.Title = "C# Scramble";
 
+            //Start timer
+            DateTime start = new DateTime();
+            start = DateTime.Now;
+
             // Set Encoding
             Console.OutputEncoding = Encoding.UTF8;
 
@@ -174,6 +178,13 @@
             }
 
             Draw.GameOver();
+            Console.ReadLine();
+            //end Timer
+            DateTime end = new DateTime();
+            end = DateTime.Now;
+            TimeSpan difference = end - start;
+            Console.WriteLine("    GAME TIME: " + difference);
+
             Thread.Sleep(28000);
             Console.Clear();
 
