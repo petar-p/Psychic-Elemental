@@ -151,33 +151,40 @@
             Questions.Print(9, startposition1 - 5, "TEAM: PSYCHIC ELEMENTAL");
             Questions.Print(11, startposition1 - 5, "TEAM MEMBERS:");
 
-            Questions.Print(13, startposition1 - 5, "ABELINA GEORGIEVA");
-            Questions.Print(13, startposition1 + 25, "(abelina)");
+            string[] teamMembers = new string[] 
+                        { "ABELINA GEORGIEVA",
+                          "BOZHKO BOZHKOV",
+                          "DIANA IVANOVA",
+                          "KONSTANTIN ISKROV",
+                          "PETAR ALEXANDROV",
+                          "PETAR PETROV",
+                          "SVETOSLAV IVANOV",
+                          "VYARA HRISTOVA"
+                        };
 
-            Questions.Print(14, startposition1 - 5, "BOZHKO BOZHKOV");
-            Questions.Print(14, startposition1 + 25, "(bbojkov)");
+            string[] teamUserNames = new string[] 
+                        { "(abelina)",
+                          "(bbojkov)",
+                          "(diana.ivanova)",
+                          "(iskroff)",
+                          "(P.Alexandrov)",
+                          "(eudaimonia)",
+                          "(Lnxslackware)",
+                          "(vyarah)"
+                        };
 
-            Questions.Print(15, startposition1 - 5, "DIANA IVANOVA");
-            Questions.Print(15, startposition1 + 25, "(diana.ivanova)");
+            for (int i = 0; i < 8; i++)
+            {
+                Questions.Print(13 + i, startposition1 - 5, teamMembers[i]);
+            }
 
-            Questions.Print(16, startposition1 - 5, "KONSTANTIN ISKROV");
-            Questions.Print(16, startposition1 + 25, "(iskroff)");
-
-            Questions.Print(17, startposition1 - 5, "PETAR ALEXANDROV");
-            Questions.Print(17, startposition1 + 25, "(P.Alexandrov)");
-
-            Questions.Print(18, startposition1 - 5, "PETAR PETROV");
-            Questions.Print(18, startposition1 + 25, "(eudaimonia)");
-
-            Questions.Print(19, startposition1 - 5, "SVETOSLAV IVANOV");
-            Questions.Print(19, startposition1 + 25, "(Lnxslackware)");
-
-            Questions.Print(20, startposition1 - 5, "VYARA HRISTOVA");
-            Questions.Print(20, startposition1 + 25, "(vyarah)");
-
+            for (int i = 0; i < 8; i++)
+            {
+                Questions.Print(13 + i, startposition1 + 25, teamUserNames[i]);
+            }
+                       
             Console.ForegroundColor = ConsoleColor.DarkCyan;
             Questions.Print(Console.WindowHeight - 2, 3, finalLine);
-
         }
 
         // Anouncing the winner and GAME OVER!
